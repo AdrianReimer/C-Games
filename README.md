@@ -1,2 +1,2 @@
-# C-Games
+# CPP-Games
 Simple C++ Games
