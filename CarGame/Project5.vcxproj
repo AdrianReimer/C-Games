@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{7B7BFCBD-2FC3-47A6-B493-EDE77C91E154}</ProjectGuid>
+    <RootNamespace>Project5</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17134.0</WindowsTargetPlatformVersion>
+    <ProjectName>Car_Game</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\OGRE\ogre-1.12.0\Samples\Common\include;C:\OGRE\Binaries\Samples\include;C:\OGRE\ogre-1.12.0\Samples\Browser\include;C:\OGRE\ogre-1.12.0\OgreMain\include;C:\OGRE\Binaries\include;C:\OGRE\ogre-1.12.0\Components\Bites\include;C:\OGRE\ogre-1.12.0\Components\Overlay\include;C:\OGRE\ogre-1.12.0\Components\RTShaderSystem\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>C:\OGRE\Binaries\lib\Debug\OgreMain_d.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;comdlg32.lib;advapi32.lib</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+      <AdditionalIncludeDirectories>C:\OGRE\ogre-1.12.0\Samples\Common\include;C:\OGRE\Binaries\Samples\include;C:\OGRE\ogre-1.12.0\Samples\Browser\include;C:\OGRE\ogre-1.12.0\OgreMain\include;C:\OGRE\Binaries\include;C:\OGRE\ogre-1.12.0\Components\Bites\include;C:\OGRE\ogre-1.12.0\Components\Overlay\include;C:\OGRE\ogre-1.12.0\Components\RTShaderSystem\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(OGRE_HOME)\lib\$(Configuration);$(OGRE_HOME)\boost\lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>..\..\lib\Release\OgreBites.lib;..\..\lib\Release\OgreOverlay.lib;..\..\lib\Release\OgreRTShaderSystem.lib;..\..\lib\Release\OgreMain.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)\$(TargetFileName)" "$(OGRE_HOME)\Bin\$(Configuration)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Forest.cpp" />
+    <ClCompile Include="Lane.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Binaries\ALL_BUILD.vcxproj">
+      <Project>{ca4f7038-51db-34f1-9a1e-d11046b40fa6}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\Bites\OgreBites.vcxproj">
+      <Project>{7c0a82e4-c6a3-3b12-a0ff-01f58ec4bf33}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\HLMS\OgreHLMS.vcxproj">
+      <Project>{1a64b662-1583-3dd7-8bc1-f79da14420fb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\MeshLodGenerator\OgreMeshLodGenerator.vcxproj">
+      <Project>{cb446fbf-cae5-35f5-9b28-27719bab7efb}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\Overlay\OgreOverlay.vcxproj">
+      <Project>{52ab4c97-397c-3901-bc84-28fce43bbf75}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\Paging\OgrePaging.vcxproj">
+      <Project>{254cf57c-6c8b-3fbd-b397-8ce646e807ac}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\Property\OgreProperty.vcxproj">
+      <Project>{f1b9d0ec-a28d-3bf5-b554-9045249d1d56}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\RTShaderSystem\OgreRTShaderSystem.vcxproj">
+      <Project>{7af750a2-076f-3920-98ed-762f9d775756}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\Terrain\OgreTerrain.vcxproj">
+      <Project>{2a21e6bd-49cc-3db7-a6f5-32d725fce0f0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Components\Volume\OgreVolume.vcxproj">
+      <Project>{2a0c2db7-2225-3328-8ad7-7809dd808ff1}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\INSTALL.vcxproj">
+      <Project>{8cc6e294-cb80-3084-b71f-1b13242b6cce}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\OgreMain\OgreMain.vcxproj">
+      <Project>{9ba1803e-5aba-38e6-abfe-df86d0b2a1cf}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PACKAGE.vcxproj">
+      <Project>{2f0fc3bc-3a69-3cb1-8004-1ad19ed93930}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PlugIns\BSPSceneManager\Plugin_BSPSceneManager.vcxproj">
+      <Project>{3b684a12-fcd1-3770-ab2f-0723b182d91a}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PlugIns\OctreeSceneManager\Plugin_OctreeSceneManager.vcxproj">
+      <Project>{0a19c937-88e4-3fd1-8633-1792214e8f9e}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PlugIns\OctreeZone\Plugin_OctreeZone.vcxproj">
+      <Project>{097a4bb8-e9fe-3769-96f7-2c6121c6f7a9}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PlugIns\ParticleFX\Plugin_ParticleFX.vcxproj">
+      <Project>{3a7315b4-62a7-3572-8af2-5068ba345687}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PlugIns\PCZSceneManager\Plugin_PCZSceneManager.vcxproj">
+      <Project>{9e4583a6-97dc-3734-8687-eeef0ea81998}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\PlugIns\STBICodec\Codec_STBI.vcxproj">
+      <Project>{f80d4d44-538f-366a-808b-91b319b81c1f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\RenderSystems\Direct3D11\RenderSystem_Direct3D11.vcxproj">
+      <Project>{a157c253-c45f-32e0-bb03-a45c82260a0b}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\RenderSystems\GL3Plus\RenderSystem_GL3Plus.vcxproj">
+      <Project>{e76a1003-66d7-3381-8644-5d53d8905b92}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\RenderSystems\GLSupport\OgreGLSupport.vcxproj">
+      <Project>{ca83362a-2e99-3b90-9fe2-993618a6f747}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\RenderSystems\GL\RenderSystem_GL.vcxproj">
+      <Project>{9eedc833-153c-3471-945f-837a0a98d238}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Samples\Browser\SampleBrowser.vcxproj">
+      <Project>{c2af4334-89c2-3d79-9e12-7d4ec067176c}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Samples\DefaultSamples.vcxproj">
+      <Project>{493590fa-5fc2-30dc-9e68-5d01d6dfdce0}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Tools\MeshUpgrader\OgreMeshUpgrader.vcxproj">
+      <Project>{760b1173-225b-3d49-8cb7-99e56624e3b2}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Tools\VRMLConverter\VRMLConverter.vcxproj">
+      <Project>{aad55a41-e4b2-3d06-a3b4-5801bfd87b7f}</Project>
+    </ProjectReference>
+    <ProjectReference Include="..\Binaries\Tools\XMLConverter\OgreXMLConverter.vcxproj">
+      <Project>{10264e61-d80c-34c7-bdf3-dd81035a8e0d}</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Forest.h" />
+    <ClInclude Include="Lane.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
