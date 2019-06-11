@@ -176,3 +176,16 @@ int make_right_lane(SceneManager* scnMgr) {
 	}
 	return 0;
 }
+
+int clean_lanes(SceneManager* scnMgr) {
+	static int i;
+	for (i = 0; i < LEFT_LANE_VEHICLE_AMOUNT; i++) {
+		scnMgr->destroySceneNode(left_lane_array[i].vehicle_node);
+		scnMgr->destroyEntity(left_lane_array[i].vehicle);
+	}
+	for (i = 0; i < RIGHT_LANE_VEHICLE_AMOUNT; i++) {
+		scnMgr->destroySceneNode(right_lane_array[i].vehicle_node);
+		scnMgr->destroyEntity(right_lane_array[i].vehicle);
+	}
+	return 0;
+}

@@ -17,7 +17,7 @@
 #define RIGHT_TREE1_SPACE (-(rand() % 170) + 250)
 #define RIGHT_TREE2_SPACE (-(rand() % 200) + 300)
 #define RIGHT_TREE3_SPACE (-(rand() % 220) + 400)
-#define FOREST_ENTITY_AMOUNT 1300
+#define FOREST_ENTITY_AMOUNT 800
 #define FOREST_ENT_POS_Y 20
 #define ROCK_SIZE Vector3(230, 230, 230)
 #define TREE_SIZE Vector3(300, 300, 300)

@@ -3,14 +3,26 @@
 #include "OgreInput.h"
 #include "OgreRTShaderSystem.h"
 #include "OgreApplicationContext.h"
+#include <OgreTrays.h>
+#include <Windows.h>
+#include <OgreRenderWindow.h>
 #include <iostream>
 #include "Forest.h"
+#include "OgreTrays.h"
 #include "Lane.h"
 
+// TextBox Scale
+#define TEXTBOX_WIDTH 180
+#define TEXTBOX_HEIGHT 30
+// GameBox Text
+#define GAMEBOX_DIED_TEXT "You Died"
+#define GAMEBOX_WON_TEXT "You Won"
 // Player
 #define PLAYER_CAR_VELOCITY_MIN -2
 #define PLAYER_CAR_VELOCITY_MAX -5
 #define PLAYER_CAR_START_POS_Z -300
+#define PLAYER_CAR_SPEED_TEXT ("Car Speed = " + std::to_string(-player_car_speed))
+#define PLAYER_POINTS_TEXT ("Points = " + std::to_string(player_points) + "/" + std::to_string(MAX_POINTS))
 // Collision
 #define CAR_COLLSION_BOX_SCALE 20
 // Velocity
@@ -30,13 +42,22 @@ using namespace OgreBites;
 
 extern struct Lane left_lane_array[LEFT_LANE_VEHICLE_AMOUNT];
 extern struct Lane right_lane_array[RIGHT_LANE_VEHICLE_AMOUNT];
+static const int MAX_POINTS = 10000; // amount of points to win the game
 static SceneNode* car_node;
 static SceneNode* camNode;
 static SceneManager* scnMgr;
-static int player_car_speed = PLAYER_CAR_VELOCITY_MIN;
-static float player_pos_z = PLAYER_CAR_START_POS_Z;
-static bool did_not_collide = true;
+static int player_car_speed = PLAYER_CAR_VELOCITY_MIN; // speed of the player
+static int player_points; // current points of the player
+static String player_points_text = PLAYER_POINTS_TEXT;   
+static String player_car_speed_text = PLAYER_CAR_SPEED_TEXT;
+static float player_pos_z = PLAYER_CAR_START_POS_Z; // z position of the player relative to root
+static bool did_not_collide = true; // false if player collided with a car
 static bool is_on_right_lane = true;
+static TextBox* car_speed_box;
+static TextBox* points_box;
+static TextBox* game_box;
+static Button* retry_btn;
+
 
 class BasicTutorial1: public ApplicationContext, public InputListener{
 public:
@@ -54,6 +75,20 @@ protected:
 BasicTutorial1::BasicTutorial1(): ApplicationContext("My Game"){
 }
 
+int restart_game(void) {
+	clean_lanes(scnMgr);
+	car_node->setPosition(Vector3(0, CAR_POS_Y, PLAYER_CAR_START_POS_Z));
+	camNode->setPosition(CAM_POS_X, CAM_POS_Y, CAM_POS_Z);
+	player_pos_z = PLAYER_CAR_START_POS_Z;
+	is_on_right_lane = true;
+	player_points = 0;
+	make_left_lane(scnMgr);
+	make_right_lane(scnMgr);
+	did_not_collide = true;
+	game_box->hide();
+	return 0;
+}
+
 bool BasicTutorial1::frameRenderingQueued(const Ogre::FrameEvent& evt)
 {
 	static int i;
@@ -67,6 +102,8 @@ bool BasicTutorial1::frameRenderingQueued(const Ogre::FrameEvent& evt)
 			left_lane_array[i].pos_z += LEFT_LANE_VEHICLE_VELOCITY;
 			if (player_pos_z - CAR_COLLSION_BOX_SCALE <= left_lane_array[i].pos_z && player_pos_z + CAR_COLLSION_BOX_SCALE >= left_lane_array[i].pos_z && !is_on_right_lane) {
 				did_not_collide = false;
+				game_box->setCaption(GAMEBOX_DIED_TEXT);
+				game_box->show();
 			}
 		}
 		// Right Lane logic
@@ -75,16 +112,34 @@ bool BasicTutorial1::frameRenderingQueued(const Ogre::FrameEvent& evt)
 			right_lane_array[i].pos_z += RIGHT_LANE_VEHICLE_VELOCITY;
 			if (player_pos_z - CAR_COLLSION_BOX_SCALE <= right_lane_array[i].pos_z && player_pos_z + CAR_COLLSION_BOX_SCALE >= right_lane_array[i].pos_z && is_on_right_lane) {
 				did_not_collide = false;
+				game_box->setCaption(GAMEBOX_DIED_TEXT);
+				game_box->show();
 			}
 		}
-	}
-	else {
-		static int delay;
-		delay++;
-		if (delay >= 180) { // 3 sec.
-			// end Game
-			getRoot()->queueEndRendering();
+		if (is_on_right_lane) {
+			// Add Points Right
+			player_points += 1 * std::abs(player_car_speed);
 		}
+		else {
+			// Add Points Left
+			player_points += 3 * std::abs(player_car_speed);
+		}
+		if (player_points >= MAX_POINTS) {
+			// Game won!
+			did_not_collide = false;
+			game_box->setCaption(GAMEBOX_WON_TEXT);
+			game_box->show();
+			player_points_text = MAX_POINTS;
+			points_box->setCaption(player_points_text);
+		}
+		else {
+			// Display points
+			player_points_text = PLAYER_POINTS_TEXT;
+			points_box->setCaption(player_points_text);
+		}
+	}
+	if (retry_btn->getState() == ButtonState::BS_DOWN) {
+		restart_game();
 	}
 	return true;
 }
@@ -101,6 +156,18 @@ void BasicTutorial1::setup(){
 	// register scene with the RTSS
 	RTShader::ShaderGenerator* shadergen = RTShader::ShaderGenerator::getSingletonPtr();
 	shadergen->addSceneManager(scnMgr);
+
+	// Create GUI System
+	RenderWindow* mWindow = getRenderWindow();
+	TrayManager* mTrayMgr = new TrayManager("InterfaceName", mWindow);
+	scnMgr->addRenderQueueListener(getOverlaySystem());
+	mTrayMgr->showLogo(TL_RIGHT);
+	addInputListener(mTrayMgr);
+	points_box = mTrayMgr->createTextBox(TL_TOPLEFT, "Points", player_points_text, TEXTBOX_WIDTH, TEXTBOX_HEIGHT);
+	car_speed_box = mTrayMgr->createTextBox(TL_BOTTOMLEFT, "CarSpeed", player_car_speed_text, TEXTBOX_WIDTH, TEXTBOX_HEIGHT);
+	game_box = mTrayMgr->createTextBox(TL_BOTTOMRIGHT, "GameState", "", TEXTBOX_WIDTH, TEXTBOX_HEIGHT);
+	game_box->hide();
+	retry_btn = mTrayMgr->createButton(TL_BOTTOMRIGHT, "RestartButton", "Restart");
 
 	// create left and right lane vehicles
 	make_left_lane(scnMgr);
@@ -157,8 +224,12 @@ bool BasicTutorial1::keyPressed(const KeyboardEvent& evt){
 		getRoot()->queueEndRendering();
 	}else if (evt.keysym.sym == SDLK_UP && player_car_speed > PLAYER_CAR_VELOCITY_MAX){
 		player_car_speed--;
+		player_car_speed_text = PLAYER_CAR_SPEED_TEXT;
+		car_speed_box->setCaption(player_car_speed_text);
 	}else if (evt.keysym.sym == SDLK_DOWN && player_car_speed < PLAYER_CAR_VELOCITY_MIN){
 		player_car_speed++;
+		player_car_speed_text = PLAYER_CAR_SPEED_TEXT;
+		car_speed_box->setCaption(player_car_speed_text);
 	}else if (evt.keysym.sym == SDLK_LEFT && did_not_collide){
 		// Turn Playercar LEFT
 		car_node->setPosition(Vector3(LEFT_LANE_POS, 200, player_pos_z));

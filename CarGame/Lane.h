@@ -18,5 +18,6 @@ struct Lane {
 
 int make_left_lane(SceneManager* scnMgr);
 int make_right_lane(SceneManager* scnMgr);
+int clean_lanes(SceneManager* scnMgr);
 
 #endif
