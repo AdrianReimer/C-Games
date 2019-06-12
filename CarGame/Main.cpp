@@ -35,6 +35,9 @@
 #define CAM_POS_X 0
 #define CAM_POS_Y 450
 #define CAM_POS_Z -110
+// Points
+#define RIGHT_LANE_POINTS (1 * std::abs(player_car_speed))
+#define LEFT_LANE_POINTS (3 * std::abs(player_car_speed))
 
 
 using namespace Ogre;
@@ -75,7 +78,10 @@ protected:
 BasicTutorial1::BasicTutorial1(): ApplicationContext("My Game"){
 }
 
-int restart_game(void) {
+/**
+ * Restarts the Game.
+ */
+static void restart_game(void) {
 	clean_lanes(scnMgr);
 	car_node->setPosition(Vector3(0, CAR_POS_Y, PLAYER_CAR_START_POS_Z));
 	camNode->setPosition(CAM_POS_X, CAM_POS_Y, CAM_POS_Z);
@@ -86,7 +92,6 @@ int restart_game(void) {
 	make_right_lane(scnMgr);
 	did_not_collide = true;
 	game_box->hide();
-	return 0;
 }
 
 bool BasicTutorial1::frameRenderingQueued(const Ogre::FrameEvent& evt)
@@ -118,11 +123,11 @@ bool BasicTutorial1::frameRenderingQueued(const Ogre::FrameEvent& evt)
 		}
 		if (is_on_right_lane) {
 			// Add Points Right
-			player_points += 1 * std::abs(player_car_speed);
+			player_points += RIGHT_LANE_POINTS;
 		}
 		else {
 			// Add Points Left
-			player_points += 3 * std::abs(player_car_speed);
+			player_points += LEFT_LANE_POINTS;
 		}
 		if (player_points >= MAX_POINTS) {
 			// Game won!
@@ -223,10 +228,12 @@ bool BasicTutorial1::keyPressed(const KeyboardEvent& evt){
 	if (evt.keysym.sym == SDLK_ESCAPE){
 		getRoot()->queueEndRendering();
 	}else if (evt.keysym.sym == SDLK_UP && player_car_speed > PLAYER_CAR_VELOCITY_MAX){
+		// increase speed
 		player_car_speed--;
 		player_car_speed_text = PLAYER_CAR_SPEED_TEXT;
 		car_speed_box->setCaption(player_car_speed_text);
 	}else if (evt.keysym.sym == SDLK_DOWN && player_car_speed < PLAYER_CAR_VELOCITY_MIN){
+		// decrease speed
 		player_car_speed++;
 		player_car_speed_text = PLAYER_CAR_SPEED_TEXT;
 		car_speed_box->setCaption(player_car_speed_text);

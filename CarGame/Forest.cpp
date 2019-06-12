@@ -5,6 +5,15 @@
 #include "OgreApplicationContext.h"
 #include <iostream>
 
+
+#define ROCK1_MESH_NAME "rock1.mesh"
+#define ROCK2_MESH_NAME "rock2.mesh"
+#define ROCK3_MESH_NAME "rock3.mesh"
+#define TREE1_MESH_NAME "tree1.mesh"
+#define TREE2_MESH_NAME "tree2.mesh"
+#define TREE3_MESH_NAME "tree3.mesh"
+#define RANDOM_ROTATION (rand() % 360)
+#define RANDOM_FOREST_ENT (rand() % 6)
 #define LEFT_ROCK1_SPACE (rand() % 170 - 300)
 #define LEFT_ROCK2_SPACE (rand() % 200 - 300)
 #define LEFT_ROCK3_SPACE (rand() % 220 - 300)
@@ -26,143 +35,106 @@
 using namespace Ogre;
 using namespace OgreBites;
 
+/**
+ * Initializes the Forest entity by setting Pitch, Roll etc.
+ */
+static void init_forest_entity(SceneManager* scnMgr, Entity* ent, SceneNode* ent_node, int random_rotation) {
+	ent->setCastShadows(true);
+	ent_node->pitch(Ogre::Degree(270.0));
+	ent_node->roll(Ogre::Degree(random_rotation));
+	ent_node->attachObject(ent);
+}
 
+/**
+* Creates the Left Forest by filling it with random Forest entities.
+* @return 0 if no error occure.
+*/
 int make_left_forest(SceneManager* scnMgr) {
 	int i;
 	for (i = 0; i < FOREST_ENTITY_AMOUNT; i++) {
-		static int pos_z = 0;
-		int random_rotation = rand() % 360;
-		int random_forest_ent = rand() % 6;
+		static int pos_z;
+		int random_rotation = RANDOM_ROTATION;
+		int random_forest_ent = RANDOM_FOREST_ENT;
+		Entity* ent;
+		SceneNode* ent_node = scnMgr->getRootSceneNode()->createChildSceneNode();
 		if (random_forest_ent == 0) {
-			Entity* rock1 = scnMgr->createEntity("rock1.mesh");
-			rock1->setCastShadows(true);
-			SceneNode* rock1_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			rock1_node->setPosition(Vector3(LEFT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			rock1_node->setScale(ROCK_SIZE);
-			rock1_node->pitch(Ogre::Degree(270.0));
-			rock1_node->roll(Ogre::Degree(random_rotation));
-			rock1_node->attachObject(rock1);
-		}
-		if (random_forest_ent == 1) {
-			Entity* rock2 = scnMgr->createEntity("rock2.mesh");
-			rock2->setCastShadows(true);
-			SceneNode* rock2_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			rock2_node->setPosition(Vector3(LEFT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			rock2_node->setScale(ROCK_SIZE);
-			rock2_node->pitch(Ogre::Degree(270.0));
-			rock2_node->roll(Ogre::Degree(random_rotation));
-			rock2_node->attachObject(rock2);
-		}
-		if (random_forest_ent == 2) {
-			Entity* rock3 = scnMgr->createEntity("rock3.mesh");
-			rock3->setCastShadows(true);
-			SceneNode* rock3_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			rock3_node->setPosition(Vector3(LEFT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			rock3_node->setScale(ROCK_SIZE);
-			rock3_node->pitch(Ogre::Degree(270.0));
-			rock3_node->roll(Ogre::Degree(random_rotation));
-			rock3_node->attachObject(rock3);
-		}
-		if (random_forest_ent == 3) {
-			Entity* tree1 = scnMgr->createEntity("tree1.mesh");
-			tree1->setCastShadows(true);
-			SceneNode* tree1_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			tree1_node->setPosition(Vector3(LEFT_TREE1_SPACE, FOREST_ENT_POS_Y, pos_z));
-			tree1_node->setScale(TREE_SIZE);
-			tree1_node->pitch(Ogre::Degree(270.0));
-			tree1_node->roll(Ogre::Degree(random_rotation));
-			tree1_node->attachObject(tree1);
-		}
-		if (random_forest_ent == 4) {
-			Entity* tree2 = scnMgr->createEntity("tree2.mesh");
-			tree2->setCastShadows(true);
-			SceneNode* tree2_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			tree2_node->setPosition(Vector3(LEFT_TREE2_SPACE, FOREST_ENT_POS_Y, pos_z));
-			tree2_node->setScale(TREE_SIZE);
-			tree2_node->pitch(Ogre::Degree(270.0));
-			tree2_node->roll(Ogre::Degree(random_rotation));
-			tree2_node->attachObject(tree2);
-		}
-		if (random_forest_ent == 5) {
-			Entity* tree3 = scnMgr->createEntity("tree3.mesh");
-			tree3->setCastShadows(true);
-			SceneNode* tree3_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			tree3_node->setPosition(Vector3(LEFT_TREE3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			tree3_node->setScale(TREE_SIZE);
-			tree3_node->pitch(Ogre::Degree(270.0));
-			tree3_node->roll(Ogre::Degree(random_rotation));
-			tree3_node->attachObject(tree3);
+			ent = scnMgr->createEntity(ROCK1_MESH_NAME);
+			ent_node->setPosition(Vector3(LEFT_ROCK1_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(ROCK_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 1) {
+			ent = scnMgr->createEntity(ROCK2_MESH_NAME);
+			ent_node->setPosition(Vector3(LEFT_ROCK2_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(ROCK_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 2) {
+			ent = scnMgr->createEntity(ROCK3_MESH_NAME);
+			ent_node->setPosition(Vector3(LEFT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(ROCK_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 3) {
+			ent = scnMgr->createEntity(TREE1_MESH_NAME);
+			ent_node->setPosition(Vector3(LEFT_TREE1_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(TREE_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 4) {
+			ent = scnMgr->createEntity(TREE2_MESH_NAME);
+			ent_node->setPosition(Vector3(LEFT_TREE2_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(TREE_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 5) {
+			ent = scnMgr->createEntity(TREE3_MESH_NAME);
+			ent_node->setPosition(Vector3(LEFT_TREE3_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(TREE_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
 		}
 		pos_z -= FOREST_RANDOM_Z;
 	}
 	return 0;
 }
 
+/**
+* Creates the Right Forest by filling it with random Forest entities.
+* @return 0 if no error occure.
+*/
 int make_right_forest(SceneManager* scnMgr) {
 	int i;
 	for (i = 0; i < FOREST_ENTITY_AMOUNT; i++) {
-		static int pos_z = 0;
-		int random_rotation = rand() % 360;
-		int random_forest_ent = rand() % 6;
+		static int pos_z;
+		int random_rotation = RANDOM_ROTATION;
+		int random_forest_ent = RANDOM_FOREST_ENT;
+		Entity* ent;
+		SceneNode* ent_node = scnMgr->getRootSceneNode()->createChildSceneNode();
 		if (random_forest_ent == 0) {
-			Entity* rock1 = scnMgr->createEntity("rock1.mesh");
-			rock1->setCastShadows(true);
-			SceneNode* rock1_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			rock1_node->setPosition(Vector3(RIGHT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			rock1_node->setScale(ROCK_SIZE);
-			rock1_node->pitch(Ogre::Degree(270.0));
-			rock1_node->roll(Ogre::Degree(random_rotation));
-			rock1_node->attachObject(rock1);
-		}
-		if (random_forest_ent == 1) {
-			Entity* rock2 = scnMgr->createEntity("rock2.mesh");
-			rock2->setCastShadows(true);
-			SceneNode* rock2_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			rock2_node->setPosition(Vector3(RIGHT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			rock2_node->setScale(ROCK_SIZE);
-			rock2_node->pitch(Ogre::Degree(270.0));
-			rock2_node->roll(Ogre::Degree(random_rotation));
-			rock2_node->attachObject(rock2);
-		}
-		if (random_forest_ent == 2) {
-			Entity* rock3 = scnMgr->createEntity("rock3.mesh");
-			rock3->setCastShadows(true);
-			SceneNode* rock3_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			rock3_node->setPosition(Vector3(RIGHT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			rock3_node->setScale(ROCK_SIZE);
-			rock3_node->pitch(Ogre::Degree(270.0));
-			rock3_node->roll(Ogre::Degree(random_rotation));
-			rock3_node->attachObject(rock3);
-		}
-		if (random_forest_ent == 3) {
-			Entity* tree1 = scnMgr->createEntity("tree1.mesh");
-			tree1->setCastShadows(true);
-			SceneNode* tree1_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			tree1_node->setPosition(Vector3(RIGHT_TREE1_SPACE, FOREST_ENT_POS_Y, pos_z));
-			tree1_node->setScale(TREE_SIZE);
-			tree1_node->pitch(Ogre::Degree(270.0));
-			tree1_node->roll(Ogre::Degree(random_rotation));
-			tree1_node->attachObject(tree1);
-		}
-		if (random_forest_ent == 4) {
-			Entity* tree2 = scnMgr->createEntity("tree2.mesh");
-			tree2->setCastShadows(true);
-			SceneNode* tree2_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			tree2_node->setPosition(Vector3(RIGHT_TREE2_SPACE, FOREST_ENT_POS_Y, pos_z));
-			tree2_node->setScale(TREE_SIZE);
-			tree2_node->pitch(Ogre::Degree(270.0));
-			tree2_node->roll(Ogre::Degree(random_rotation));
-			tree2_node->attachObject(tree2);
-		}
-		if (random_forest_ent == 5) {
-			Entity* tree3 = scnMgr->createEntity("tree3.mesh");
-			tree3->setCastShadows(true);
-			SceneNode* tree3_node = scnMgr->getRootSceneNode()->createChildSceneNode();
-			tree3_node->setPosition(Vector3(RIGHT_TREE3_SPACE, FOREST_ENT_POS_Y, pos_z));
-			tree3_node->setScale(TREE_SIZE);
-			tree3_node->pitch(Ogre::Degree(270.0));
-			tree3_node->roll(Ogre::Degree(random_rotation));
-			tree3_node->attachObject(tree3);
+			ent = scnMgr->createEntity(ROCK1_MESH_NAME);
+			ent_node->setPosition(Vector3(RIGHT_ROCK1_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(ROCK_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 1) {
+			ent = scnMgr->createEntity(ROCK2_MESH_NAME);
+			ent_node->setPosition(Vector3(RIGHT_ROCK2_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(ROCK_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 2) {
+			ent = scnMgr->createEntity(ROCK3_MESH_NAME);
+			ent_node->setPosition(Vector3(RIGHT_ROCK3_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(ROCK_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 3) {
+			ent = scnMgr->createEntity(TREE1_MESH_NAME);
+			ent_node->setPosition(Vector3(RIGHT_TREE1_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(TREE_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 4) {
+			ent = scnMgr->createEntity(TREE2_MESH_NAME);
+			ent_node->setPosition(Vector3(RIGHT_TREE2_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(TREE_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
+		} else if (random_forest_ent == 5) {
+			ent = scnMgr->createEntity(TREE3_MESH_NAME);
+			ent_node->setPosition(Vector3(RIGHT_TREE3_SPACE, FOREST_ENT_POS_Y, pos_z));
+			ent_node->setScale(TREE_SIZE);
+			init_forest_entity(scnMgr, ent, ent_node, random_rotation);
 		}
 		pos_z -= FOREST_RANDOM_Z;
 	}
