@@ -1,0 +1,12 @@
+﻿C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(377,5): warning MSB8004: Das Output-Verzeichnis endet nicht mit einem nachstehenden Schrägstrich. Der Schrägstrich wird in dieser Buildinstanz hinzugefügt, da er für die ordnungsgemäße Auswertung des Output-Verzeichnisses erforderlich ist.
+C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\VC\VCTargets\Microsoft.CppBuild.targets(391,5): warning MSB8028: Das Zwischenverzeichnis (Debug\) enthält freigegebene Dateien aus einem anderen Projekt (MyGame.vcxproj). Dies kann zu einem falschen Bereinigungs- und Neuerstellungsverhalten führen.
+  Main.cpp
+c:\users\adria\source\repos\mygame\mygame\main.cpp(31): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(32): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(33): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(34): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(35): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(36): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(37): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+c:\users\adria\source\repos\mygame\mygame\main.cpp(38): warning C4305: "Argument": Verkürzung von "double" in "irr::f32"
+  MyGame.vcxproj -> C:\irrlicht-1.8.4\bin\Win32-VisualStudio\Shooter.exe
