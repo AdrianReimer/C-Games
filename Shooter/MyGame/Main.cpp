@@ -2,6 +2,7 @@
 #include "driverChoice.h"
 #include <stdlib.h>
 #include <string> 
+#include "Soldier.h"
 
 using namespace irr;
 using namespace core;
@@ -14,11 +15,72 @@ using namespace gui;
 #pragma comment(lib, "Irrlicht.lib")
 #endif
 
+static IAnimatedMeshSceneNode* player_node; // Player model
+
+class MyEventReceiver : public IEventReceiver
+{
+public:
+	// We'll create a struct to record info on the mouse state
+	struct SMouseState
+	{
+		core::position2di Position;
+		bool LeftButtonDown;
+		SMouseState() : LeftButtonDown(false) { }
+	} MouseState;
+
+	// This is the one method that we have to implement
+	virtual bool OnEvent(const SEvent& event)
+	{
+		// Remember the mouse state
+		if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)
+		{
+			switch (event.MouseInput.Event)
+			{
+			case EMIE_LMOUSE_PRESSED_DOWN:
+				printf("pressed");
+				player_node->setAnimationSpeed(100);
+				player_node->setFrameLoop(0, 15);
+				MouseState.LeftButtonDown = true;
+				break;
+
+			case EMIE_LMOUSE_LEFT_UP:
+				player_node->setAnimationSpeed(50);
+				player_node->setFrameLoop(30, 130);
+				MouseState.LeftButtonDown = false;
+				break;
+
+			case EMIE_MOUSE_MOVED:
+				MouseState.Position.X = event.MouseInput.X;
+				MouseState.Position.Y = event.MouseInput.Y;
+				break;
+
+			default:
+				// We won't use the wheel
+				break;
+			}
+		}
+
+		return false;
+	}
+
+	const SMouseState & GetMouseState(void) const
+	{
+		return MouseState;
+	}
+};
+
+
+
+
+
 
 int main()
 {
+
+	MyEventReceiver receiver;
+
 	// create device
-	IrrlichtDevice *device = createDevice(EDT_OPENGL, dimension2d<u32>(640, 480), 16, false);
+	IrrlichtDevice *device = createDevice(EDT_OPENGL, dimension2d<u32>(640, 480), 16, false, false, false, &receiver);
 
 	IVideoDriver* driver = device->getVideoDriver();
 	ISceneManager* smgr = device->getSceneManager();
@@ -98,31 +160,13 @@ int main()
 	bill->setSize(dimension2d<f32>(20.0f, 20.0f));
 	bill->setID(-1); // This ensures that we don't accidentally ray-pick it
 
-	// Player Model
-	IAnimatedMeshSceneNode* soldier;
-	SMaterial material;
-	SMaterial material2;
-
-
-	soldier = smgr->addAnimatedMeshSceneNode(smgr->getMesh("../../media/models/dynamic/soldier.md3"), camera, -1, vector3df(-3, -90, -18));
-	material.setTexture(0, driver->getTexture("../../media/models/dynamic/demo_soldier_512.tga"));
-	soldier->setRotation(vector3df(0, 180, 0));
-	soldier->setAnimationSpeed(50);
-	material.Lighting = true;
-	material.NormalizeNormals = true;
-	material2.setTexture(0, driver->getTexture("../../media/models/dynamic/demo_weapon.tga"));
-	material2.Lighting = true;
-	material2.NormalizeNormals = true;
-	soldier->getMaterial(0) = material;
-	soldier->getMaterial(1) = material2;
+	Soldier soldier(driver);
+	player_node = soldier.create_soldier(smgr, camera, vector3df(0,-80,-15));
+	soldier.spawn_enemies(smgr);
 
 
 	ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
 	int lastFPS = -1;
-
-	// draw the selection triangle only as wireframe
-	material.Wireframe = true;
-
 	while (device->run())
 		if (device->isWindowActive())
 		{
@@ -135,6 +179,10 @@ int main()
 			line3d<f32> ray;
 			ray.start = camera->getPosition();
 			ray.end = ray.start + (camera->getTarget() - ray.start).normalize() * 1000.0f;
+
+			printf("x= %f\n", player_node->getAbsolutePosition().X);
+			printf("y= %f\n", player_node->getAbsolutePosition().Y);
+			printf("z= %f\n", player_node->getAbsolutePosition().Z);
 
 			vector3df intersection; // Tracks the current intersection point with the level or a mesh
 			triangle3df hitTriangle; // Used to show with triangle has been hit
