@@ -44,7 +44,7 @@ public:
 	Soldier(IVideoDriver* driver);
 	IAnimatedMeshSceneNode * create_soldier(ISceneManager* smgr, ISceneNode* parent, vector3df position);
 	void spawn_enemies(ISceneManager* smgr);
-	void update_behavior(ICameraSceneNode* camera, bool player_is_attacking);
+	void update_behavior(ICameraSceneNode* camera, bool player_is_attacking, ISceneCollisionManager* collMan);
 	void check_ai(int* player_health);
 	int get_soldiers_alive();
 };

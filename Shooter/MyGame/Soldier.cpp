@@ -16,6 +16,8 @@
 #define ATTACK_DAMAGE (rand() % 10 + 15)
 // Health
 #define HEALTH 1000
+// Collision
+#define CAMERA_COLLISION_OFFSET_VECTOR vector3df(0,20,0)
 
 
 using namespace irr;
@@ -48,21 +50,22 @@ IAnimatedMeshSceneNode* Soldier::create_soldier(ISceneManager* smgr, ISceneNode*
 void Soldier::spawn_enemies(ISceneManager* smgr) {
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++) {
 		enemies[i] = create_soldier(smgr, NULL, enemies_pos[i]);
+		enemies[i]->setName("soldier" + i);
 		enemies_state[i].state = IDLE_STATE;
 		enemies_state[i].reaction_time = REACTION_TIME;
 		enemies_state[i].health = HEALTH;
 	}
 }
 
-void Soldier::update_behavior(ICameraSceneNode* camera, bool player_is_attacking) {
+void Soldier::update_behavior(ICameraSceneNode* camera, bool player_is_attacking, ISceneCollisionManager* collMan) {
 	line3d<f32> ray;
-	ray.start = camera->getPosition();
-	ray.end = ray.start + (camera->getTarget() - ray.start).normalize() * AGGRO_RANGE;
+	ray.start = camera->getPosition() + CAMERA_COLLISION_OFFSET_VECTOR;
+	ray.end = ray.start + (camera->getTarget() - ray.start) * AGGRO_RANGE;
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++) {
 		if ((camera->getAbsolutePosition().getDistanceFrom(enemies[i]->getAbsolutePosition())) < AGGRO_RANGE) {
 			enemies_state[i].state = ATTACK_STATE;
 			enemies[i]->setRotation(vector3df(0, camera->getRotation().Y, 0));
-			if (player_is_attacking && ray.end.getDistanceFrom(enemies[i]->getAbsolutePosition()) < PLAYER_HIT_RANGE){
+			if (player_is_attacking && collMan->getSceneNodeFromRayBB(ray) == enemies[i]){
 				enemies_state[i].health -= ATTACK_DAMAGE;
 				if (enemies_state[i].health <= 0) {
 					enemies[i]->setPosition(DEATH_POSITION);

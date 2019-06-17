@@ -10,7 +10,7 @@
 #endif
 
 // Player
-#define PLAYER_HEALTH 10000
+#define PLAYER_HEALTH 100
 #define PLAYER_MOVEMENT_SPEED 0.3
 #define PLAYER_JUMP_HEIGHT 0.5
 // World
@@ -164,7 +164,7 @@ int loop() {
 					guienv->addStaticText(WON_TEXT, rect<s32>(10, 10, 250, 30), true, true, 0, -1, true);
 					is_dead = true;
 				}
-				soldier.update_behavior(camera, receiver.get_is_attacking());
+				soldier.update_behavior(camera, receiver.get_is_attacking(),collMan);
 				soldier.check_ai(&player_health);
 			}
 			else {
