@@ -7,10 +7,11 @@
 
 #ifdef _MSC_VER
 #pragma comment(lib, "Irrlicht.lib")
+#pragma comment(linker, "/subsystem:windows /ENTRY:mainCRTStartup")
 #endif
 
 // Player
-#define PLAYER_HEALTH 100
+#define PLAYER_HEALTH 10000
 #define PLAYER_MOVEMENT_SPEED 0.3
 #define PLAYER_JUMP_HEIGHT 0.5
 // World
@@ -51,6 +52,11 @@ static IGUIEnvironment* guienv;
 
 int setup();
 int loop();
+/**
+ * Main Function. Entry Point of the Program.
+ *
+ * @return 0 if no errors occurred.
+ */
 int main()
 {
 	// init game level
@@ -62,7 +68,12 @@ int main()
 	return 0;
 }
 
-int setup() {
+/**
+ * Initializes the Game Level by defining important Irrlicht Objects, adding Light to the scene, keyboard control etc.
+ *
+ * @return 0 if no errors occurred.
+ */
+static int setup() {
 	// create device
 	device = createDevice(EDT_OPENGL, dimension2d<u32>(WINDOW_WIDTH, WINDOW_HEIGHT), 16, false, false, false, &receiver);
 	driver = device->getVideoDriver();
@@ -139,7 +150,12 @@ int setup() {
 	return 0;
 }
 
-int loop() {
+/**
+ * Updates the Game Level and Window Text. (No deltatime yet.)
+ *
+ * @return 0 if no errors occurred.
+ */
+static int loop() {
 	Soldier soldier(driver);
 	player_node = soldier.create_soldier(smgr, camera, vector3df(0, -80, -15)); // player soldier model
 	receiver.setPlayer(player_node);
@@ -148,6 +164,7 @@ int loop() {
 	ISceneCollisionManager* collMan = smgr->getSceneCollisionManager();
 	int lastFPS = -1;
 	// game loop
+
 	while (device->run())
 		if (device->isWindowActive())
 		{

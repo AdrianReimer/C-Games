@@ -7,7 +7,7 @@
 #include <string> 
 
 #define AMOUNT_OF_ENEMIES 9 // If change --> add more spawn positions
-#define REACTION_TIME (rand() % 200 + 150) 
+#define REACTION_TIME (rand() % 200 + 150) // Time until the Enemy starts shooting the Player
 
 using namespace irr;
 using namespace core;
@@ -15,7 +15,6 @@ using namespace scene;
 using namespace video;
 using namespace io;
 using namespace gui;
-
 
 
 class Soldier {

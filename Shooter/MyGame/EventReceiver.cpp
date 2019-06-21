@@ -11,6 +11,12 @@ using namespace video;
 using namespace io;
 using namespace gui;
 
+/**
+ * Input Event Handler that handles Keyboard and Mouse presses.
+ *
+ * @param event holds information about the event
+ * @return false if no errors occured
+ */
 bool MyEventReceiver::OnEvent(const SEvent& event) {
 	// Remember the mouse state
 	if (event.EventType == irr::EET_MOUSE_INPUT_EVENT)

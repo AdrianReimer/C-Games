@@ -36,6 +36,14 @@ Soldier::Soldier(IVideoDriver* driver) {
 	material_weapon.NormalizeNormals = true;
 }
 
+/**
+ * Spawns a new Soldier.
+ *
+ * @param smgr Current SceneManager.
+ * @param parent Possible Parent of the Soldier. Can be NULL.
+ * @param position Position of the Soldier.
+ * @return Pointer to the created Soldier.
+ */
 IAnimatedMeshSceneNode* Soldier::create_soldier(ISceneManager* smgr, ISceneNode* parent, vector3df position) {
 	IAnimatedMeshSceneNode* soldier = smgr->addAnimatedMeshSceneNode(smgr->getMesh(SOLDIER_MODEL_PATH), parent, -1, vector3df(-3, -90, -18));
 	soldier->setPosition(position);
@@ -47,9 +55,15 @@ IAnimatedMeshSceneNode* Soldier::create_soldier(ISceneManager* smgr, ISceneNode*
 	return soldier;
 }
 
+/**
+ * Spawns the Soldier enemies. Enemies get a unique ID.
+ *
+ * @param smgr Current SceneManager.
+ */
 void Soldier::spawn_enemies(ISceneManager* smgr) {
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++) {
 		enemies[i] = create_soldier(smgr, NULL, enemies_pos[i]);
+		enemies[i]->setID(-2); // special enemy ID
 		enemies[i]->setName("soldier" + i);
 		enemies_state[i].state = IDLE_STATE;
 		enemies_state[i].reaction_time = REACTION_TIME;
@@ -57,17 +71,27 @@ void Soldier::spawn_enemies(ISceneManager* smgr) {
 	}
 }
 
+/**
+ * Updates the enemy Soldiers Ai behavior (StateMachines).
+ *
+ * @param camera Player Camera.
+ * @param player_is_attacking true if player is attacking.
+ * @param collMan Current CollisonManager.
+ */
 void Soldier::update_behavior(ICameraSceneNode* camera, bool player_is_attacking, ISceneCollisionManager* collMan) {
-	line3d<f32> ray;
+	line3d<f32> ray; // for collision detection
 	ray.start = camera->getPosition() + CAMERA_COLLISION_OFFSET_VECTOR;
-	ray.end = ray.start + (camera->getTarget() - ray.start) * AGGRO_RANGE;
+	ray.end = camera->getTarget();
+	core::vector3df intersection;
+	core::triangle3df hitTriangle;
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++) {
 		if ((camera->getAbsolutePosition().getDistanceFrom(enemies[i]->getAbsolutePosition())) < AGGRO_RANGE) {
 			enemies_state[i].state = ATTACK_STATE;
-			enemies[i]->setRotation(vector3df(0, camera->getRotation().Y, 0));
-			if (player_is_attacking && collMan->getSceneNodeFromRayBB(ray) == enemies[i]){
+			enemies[i]->setRotation(vector3df(0, camera->getRotation().Y, 0)); // Look to the Player
+			if (player_is_attacking && collMan->getSceneNodeAndCollisionPointFromRay(ray, intersection, hitTriangle, -2, 0) == enemies[i]){
 				enemies_state[i].health -= ATTACK_DAMAGE;
 				if (enemies_state[i].health <= 0) {
+					// Enemy Died
 					enemies[i]->setPosition(DEATH_POSITION);
 					enemies_state[i].state = DEAD_STATE;
 					soldier_ai_alive--;
@@ -75,6 +99,7 @@ void Soldier::update_behavior(ICameraSceneNode* camera, bool player_is_attacking
 			}
 		}
 		else {
+			// Player out of Range. Back to IDLE State.
 			enemies[i]->setFrameLoop(IDLE_ANIMATION_FRAME_LOOP);
 			enemies_state[i].state = IDLE_STATE;
 			enemies_state[i].reaction_time = REACTION_TIME;
@@ -82,11 +107,17 @@ void Soldier::update_behavior(ICameraSceneNode* camera, bool player_is_attacking
 	}
 }
 
+/**
+ * Checks the Ai States of the enemy Soldiers. Performes tasks on what State the enemy is in.
+ *
+ * @param player_health Current Health of the Player.
+ */
 void Soldier::check_ai(int* player_health) {
 	for (int i = 0; i < AMOUNT_OF_ENEMIES; i++) {
 		if (enemies_state[i].state == ATTACK_STATE) {
 			enemies_state[i].reaction_time--;
 			if (enemies_state[i].reaction_time <= 0) {
+				// Enemy shoots
 				*player_health -= ATTACK_DAMAGE;
 				enemies[i]->setFrameLoop(SHOOT_ANIMATION_FRAME_LOOP);
 				enemies_state[i].reaction_time = REACTION_TIME;
